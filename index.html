@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formation — Processus d'Achat</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f8f6f1;
+    --accent: #2563eb;
+    --accent-light: #dbeafe;
+    --accent-dark: #1e40af;
+    --warm: #f59e0b;
+    --warm-light: #fef3c7;
+    --warm-dark: #b45309;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --danger-border: #fca5a5;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --muted: #6b7280;
+    --border: #e5e2db;
+    --card: #ffffff;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === HERO === */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    backdrop-filter: blur(4px);
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em {
+    color: var(--warm);
+    font-style: italic;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 600px;
+  }
+
+  /* === LAYOUT === */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* === METHOD TABS === */
+  .method-nav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 48px;
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    padding: 16px 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .method-tab {
+    flex: 1;
+    padding: 16px 24px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .method-tab:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .method-tab.active {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .method-tab .tab-icon {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
+
+  .method-tab .tab-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .method-tab .tab-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* === SECTIONS === */
+  .method-section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .method-section.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === SECTION HEADER === */
+  .section-header {
+    margin-bottom: 40px;
+  }
+
+  .section-header .method-number {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-header .method-number span {
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    letter-spacing: 0;
+  }
+
+  .section-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+
+  .section-header p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 650px;
+  }
+
+  /* === FLOW DIAGRAM === */
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 36px 0;
+  }
+
+  .flow-step {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .flow-step:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+  }
+
+  .flow-step .step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+
+  .flow-step h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .flow-step p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    color: var(--accent);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  /* === DETAIL STEPS === */
+  .step-detail {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 24px;
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+  }
+
+  .step-detail:hover {
+    box-shadow: var(--shadow);
+    border-color: var(--accent-light);
+  }
+
+  .step-detail .detail-num {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-top: 2px;
+  }
+
+  .step-detail h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .step-detail p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .step-detail code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .step-detail .status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .badge-blue {
+    background: var(--accent-light);
+    color: var(--accent-dark);
+  }
+
+  .badge-amber {
+    background: var(--warm-light);
+    color: var(--warm-dark);
+  }
+
+  /* === ALERT === */
+  .alert {
+    display: flex;
+    gap: 16px;
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin: 32px 0;
+    border: 1px solid;
+  }
+
+  .alert-danger {
+    background: var(--danger-light);
+    border-color: var(--danger-border);
+  }
+
+  .alert-info {
+    background: var(--accent-light);
+    border-color: #93c5fd;
+  }
+
+  .alert-success {
+    background: var(--success-light);
+    border-color: #6ee7b7;
+  }
+
+  .alert-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .alert h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .alert-danger h4 { color: var(--danger); }
+  .alert-info h4 { color: var(--accent-dark); }
+  .alert-success h4 { color: var(--success); }
+
+  .alert p {
+    font-size: 0.88rem;
+    color: var(--ink);
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+
+  /* === PLANNING FEATURES === */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--warm);
+  }
+
+  .feature-card .feat-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--warm-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+  }
+
+  .feature-card h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .feature-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* === COMPARISON === */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 48px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .compare-card {
+    border-radius: 16px;
+    padding: 32px;
+    border: 2px solid;
+  }
+
+  .compare-card.direct {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-color: #93c5fd;
+  }
+
+  .compare-card.indirect {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: #fcd34d;
+  }
+
+  .compare-card .cc-icon {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+
+  .compare-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+
+  .compare-card ul {
+    list-style: none;
+    margin-top: 16px;
+  }
+
+  .compare-card li {
+    padding: 6px 0;
+    font-size: 0.88rem;
+    color: var(--ink);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  .compare-card li::before {
+    content: '→';
+    color: var(--muted);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* === FOOTER === */
+  .doc-footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  .doc-footer strong {
+    color: var(--ink);
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 700px) {
+    .hero { padding: 50px 24px 40px; }
+    .hero h1 { font-size: 2rem; }
+    .container { padding: 40px 20px; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); justify-content: center; padding: 8px 0; }
+    .feature-grid, .comparison { grid-template-columns: 1fr; }
+    .method-nav { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">📘 Formation interne</div>
+    <h1>Processus d'Achat :<br>les <em>deux méthodes</em></h1>
+    <p>Comment créer un Purchase Order, que ce soit directement depuis un Sales Order ou via le composant Planning.</p>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- TABS -->
+  <nav class="method-nav">
+    <div class="method-tab active" onclick="switchTab('direct')">
+      <div class="tab-icon">🎯</div>
+      <div class="tab-label">Méthode Directe</div>
+      <div class="tab-sub">Depuis un Sales Order</div>
+    </div>
+    <div class="method-tab" onclick="switchTab('indirect')">
+      <div class="tab-icon">📊</div>
+      <div class="tab-label">Méthode Indirecte</div>
+      <div class="tab-sub">Composant Planning</div>
+    </div>
+  </nav>
+
+  <!-- ===================== METHODE DIRECTE ===================== -->
+  <section id="direct" class="method-section active">
+
+    <div class="section-header">
+      <div class="method-number"><span>1</span> Méthode Directe</div>
+      <h2>Créer un PO depuis le Sales Order</h2>
+      <p>Cette méthode est liée directement à un Sales Order dont le statut est <strong>Parts to Order</strong>. Les achats filtrent les Sales Orders concernés et déclenchent la création du Purchase Order.</p>
+    </div>
+
+    <!-- FLOW -->
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <h4>Filtrer</h4>
+        <p>Sales Orders au statut <em>Parts to Order</em></p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <h4>Créer le PO</h4>
+        <p>Clic sur <em>Create Purchase Order</em></p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <h4>Mettre à jour</h4>
+        <p>Statut → <em>Waiting for Parts</em></p>
+      </div>
+    </div>
+
+    <!-- STEPS DETAIL -->
+    <div class="step-detail">
+      <div class="detail-num">1</div>
+      <div>
+        <h4>Filtrer les Sales Orders</h4>
+        <p>Les achats identifient les Sales Orders ayant le statut <span class="status-badge badge-blue">Parts to Order</span>. Utilisez la vue de liste ou un rapport pour les retrouver rapidement.</p>
+      </div>
+    </div>
+
+    <div class="step-detail">
+      <div class="detail-num">2</div>
+      <div>
+        <h4>Ouvrir le Sales Order et créer le Purchase Order</h4>
+        <p>Une fois le Sales Order ouvert, cliquez sur le bouton <code>Create Purchase Order</code>. Accounting Seed initialise automatiquement les <strong>Purchase Order Lines</strong> avec les produits dont la <strong>quantité needed est supérieure à 0</strong>.</p>
+      </div>
+    </div>
+
+    <div class="step-detail">
+      <div class="detail-num">3</div>
+      <div>
+        <h4>Mettre à jour le statut du Sales Order</h4>
+        <p>Après la création du PO, changez le statut du Sales Order vers <span class="status-badge badge-amber">Waiting for Parts</span> pour indiquer que les pièces sont en commande.</p>
+      </div>
+    </div>
+
+    <!-- ALERT -->
+    <div class="alert alert-danger">
+      <div class="alert-icon">⚠️</div>
+      <div>
+        <h4>Attention — Allocation incorrecte</h4>
+        <p>Si le magasinier n'a pas correctement alloué les produits au préalable, le Purchase Order pourrait inclure des produits <strong>déjà en stock</strong>. Vérifiez toujours les allocations avant de lancer la création du PO.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===================== METHODE INDIRECTE ===================== -->
+  <section id="indirect" class="method-section">
+
+    <div class="section-header">
+      <div class="method-number"><span>2</span> Méthode Indirecte</div>
+      <h2>Le composant Planning</h2>
+      <p>Cette méthode utilise le composant Planning pour analyser le stock, anticiper les besoins futurs et générer les commandes fournisseurs de manière proactive.</p>
+    </div>
+
+    <div class="alert alert-info">
+      <div class="alert-icon">💡</div>
+      <div>
+        <h4>Principe de fonctionnement</h4>
+        <p>Le composant Planning croise trois informations clés : le <strong>stock disponible</strong>, les <strong>consommations futures</strong> basées sur les Sales Orders, et le <strong>stock de sécurité</strong> défini au niveau de chaque produit.</p>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feat-icon">📦</div>
+        <h4>Stock disponible</h4>
+        <p>Visualisation en temps réel du stock actuel pour une sélection de produits.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📈</div>
+        <h4>Consommations futures</h4>
+        <p>Prévisions basées sur les Sales Orders existants et à venir.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🛡️</div>
+        <h4>Stock de sécurité</h4>
+        <p>Seuil minimum défini sur chaque fiche produit pour éviter les ruptures.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🔍</div>
+        <h4>Filtre fournisseur</h4>
+        <p>Possibilité de filtrer par fournisseur pour regrouper les commandes et passer un PO ciblé.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-success">
+      <div class="alert-icon">✅</div>
+      <div>
+        <h4>Avantage clé</h4>
+        <p>Le Planning permet d'anticiper les achats <strong>avant</strong> que les Sales Orders ne passent en statut "Parts to Order", offrant une gestion proactive et optimisée du réapprovisionnement.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===================== COMPARAISON ===================== -->
+  <div class="comparison">
+    <div class="compare-card direct">
+      <div class="cc-icon">🎯</div>
+      <h3>Méthode Directe</h3>
+      <ul>
+        <li>Réactive — déclenchée par un besoin immédiat</li>
+        <li>Liée à un Sales Order spécifique</li>
+        <li>Rapide à exécuter (3 étapes)</li>
+        <li>Risque si mauvaise allocation préalable</li>
+      </ul>
+    </div>
+    <div class="compare-card indirect">
+      <div class="cc-icon">📊</div>
+      <h3>Méthode Planning</h3>
+      <ul>
+        <li>Proactive — anticipe les besoins futurs</li>
+        <li>Vue globale sur plusieurs produits</li>
+        <li>Intègre le stock de sécurité</li>
+        <li>Filtre fournisseur pour regrouper les PO</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <strong>Formation Processus d'Achat</strong> — Document interne<br>
+  Dernière mise à jour : Mars 2026
+</footer>
+
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.method-section').forEach(s => s.classList.remove('active'));
+
+    document.getElementById(tab).classList.add('active');
+
+    const tabs = document.querySelectorAll('.method-tab');
+    if (tab === 'direct') tabs[0].classList.add('active');
+    else tabs[1].classList.add('active');
+  }
+</script>
+
+</body>
+</html>
